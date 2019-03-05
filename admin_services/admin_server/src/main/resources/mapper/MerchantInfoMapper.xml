@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="MerchantInfoMapper">
+
+	<resultMap id="BaseResultMap" type="com.xxyp.admin.common.model.merchant.MerchantInfo">
+		<id property="id" column="id" />
+		<result property="merchantName" column="merchant_name" />
+		<result property="merchantNo" column="merchant_no" />
+		<result property="applyDate" column="apply_date" />
+		<result property="legalpersonName" column="legalperson_name" />
+		<result property="legalpersonDoctype" column="legalperson_doctype" />
+		<result property="legalpersonDocno" column="legalperson_docno" />
+		<result property="legalpersonPhone" column="legalperson_phone" />
+		<result property="status" column="status" />
+		<result property="usedTag" column="used_tag" />
+		<result property="createDate" column="create_date" />
+		<result property="creator" column="creator" />
+		<result property="editDate" column="edit_date" />
+		<result property="editor" column="editor" />
+	</resultMap>
+	<sql id="All_Column">
+		id,merchant_name,merchant_no,apply_date,legalperson_name,legalperson_doctype,legalperson_docno,legalperson_phone,status,used_tag,create_date,creator,edit_date,editor
+	</sql>
+
+	<select id="getMerchantInfo" parameterType="map" resultMap="BaseResultMap" >
+		select
+		<include refid="All_Column" />
+		from merchant_info
+		where 1=1 
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<if test="merchantName != null and merchantName !=''">
+			and merchant_name = #{merchantName}
+		</if>
+		
+		<if test="merchantNo != null and merchantNo !=''">
+			and merchant_no = #{merchantNo}
+		</if>
+		
+		<if test="applyDate != null ">
+			and apply_date = #{applyDate}
+		</if>
+		
+		<if test="legalpersonName != null and legalpersonName !=''">
+			and legalperson_name = #{legalpersonName}
+		</if>
+		
+		<if test="legalpersonDoctype != null ">
+			and legalperson_doctype = #{legalpersonDoctype}
+		</if>
+		
+		<if test="legalpersonDocno != null and legalpersonDocno !=''">
+			and legalperson_docno = #{legalpersonDocno}
+		</if>
+		
+		<if test="legalpersonPhone != null and legalpersonPhone !=''">
+			and legalperson_phone = #{legalpersonPhone}
+		</if>
+		
+		<if test="status != null ">
+			and status = #{status}
+		</if>
+		
+	</select>
+	
+	<select id="queryMerchantInfoForPage" parameterType="map" resultMap="BaseResultMap">
+		 select
+        <include refid="All_Column"/>
+       	 from merchant_info  
+       	 <include refid="queryPageSqlCondition"/>
+       	 order by id limit #{startIndex},#{pageSize}
+	</select>
+	
+	<select id="countMerchantInfoForPage" parameterType="map" resultType="int">
+		select count(1) 
+		from merchant_info
+		<include refid="queryPageSqlCondition"/>
+	</select>
+	
+	<insert id="saveMerchantInfo" parameterType="com.xxyp.admin.common.model.merchant.MerchantInfo" useGeneratedKeys="true" keyProperty="id">
+		insert into merchant_info(
+		merchant_name,
+		merchant_no,
+		apply_date,
+		legalperson_name,
+		legalperson_doctype,
+		legalperson_docno,
+		legalperson_phone,
+		status,
+		used_tag,
+		create_date,
+		creator,
+		edit_date,
+		editor
+		)values (
+		#{merchantName},
+		#{merchantNo},
+		#{applyDate},
+		#{legalpersonName},
+		#{legalpersonDoctype},
+		#{legalpersonDocno},
+		#{legalpersonPhone},
+		#{status},
+		#{usedTag},
+		#{createDate},
+		#{creator},
+		#{editDate},
+		#{editor}
+		)
+	</insert>
+	
+	<update id="updateMerchantInfo" parameterType="com.xxyp.admin.common.model.merchant.MerchantInfo">
+		update merchant_info
+			set
+			merchant_name = #{merchantName},
+			merchant_no = #{merchantNo},
+			apply_date = #{applyDate},
+			legalperson_name = #{legalpersonName},
+			legalperson_doctype = #{legalpersonDoctype},
+			legalperson_docno = #{legalpersonDocno},
+			legalperson_phone = #{legalpersonPhone},
+			status = #{status},
+			editor = #{editor},
+			edit_date = #{editDate}	
+		where id = #{id}
+	</update>
+	
+	<delete id="deleteMerchantInfo" parameterType="long">
+		delete from merchant_info where id = #{id}
+	</delete>
+	
+	<sql id="queryPageSqlCondition">
+		<where>
+			<if test="id!=null">
+				id = #{id}
+			</if>
+			
+			<if test="merchantName != null and merchantName !=''">
+				and merchant_name = #{merchantName}
+			</if>
+			
+			<if test="merchantNo != null and merchantNo !=''">
+				and merchant_no = #{merchantNo}
+			</if>
+			
+			<if test="applyDate != null ">
+				and apply_date = #{applyDate}
+			</if>
+			
+			<if test="legalpersonName != null and legalpersonName !=''">
+				and legalperson_name = #{legalpersonName}
+			</if>
+			
+			<if test="legalpersonDoctype != null ">
+				and legalperson_doctype = #{legalpersonDoctype}
+			</if>
+			
+			<if test="legalpersonDocno != null and legalpersonDocno !=''">
+				and legalperson_docno = #{legalpersonDocno}
+			</if>
+			
+			<if test="legalpersonPhone != null and legalpersonPhone !=''">
+				and legalperson_phone = #{legalpersonPhone}
+			</if>
+			
+			<if test="status != null ">
+				and status = #{status}
+			</if>
+			
+		</where>
+	</sql>
+	
+</mapper>

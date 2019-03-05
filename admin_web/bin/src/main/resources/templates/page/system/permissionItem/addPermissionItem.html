@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/common :: common_header(~{::title})">
+<title>新增子权限</title>
+</head>
+
+<body>
+<form class="layui-form" action="" style="padding: 20px 0 0 0;">
+	
+    <input type="hidden" name="permissionId" th:value="${pid}"/>
+    <div class="layui-form-item">
+      <label class="layui-form-label">子权限名称</label>
+      <div class="layui-input-inline">
+        <input type="text" name="name" lay-verify="required" placeholder="请输入子权限名称" autocomplete="off" class="layui-input">
+      </div>
+    </div>
+     <div class="layui-form-item">
+      <label class="layui-form-label">方法一名称</label>
+      <div class="layui-input-inline">
+        <input type="text" name="methodValue1"  placeholder="请输入方法一名称" autocomplete="off" class="layui-input">
+      </div>
+    </div>
+     <div class="layui-form-item">
+      <label  class="layui-form-label">方法二名称</label>
+      <div class="layui-input-inline" style="width:60%">
+        <input type="text" name="methodValue2"   placeholder="请输入方法二名称" autocomplete="off" class="layui-input">
+      </div>
+    </div>
+   
+   
+    <div class="layui-form-item layui-hide">
+      <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
+    </div>
+  </form>
+  
+   <script>
+  layui.use(['form'], function(){
+    var $ = layui.$
+    ,form = layui.form;
+  })
+  </script>
+  
+</body>
+</html>

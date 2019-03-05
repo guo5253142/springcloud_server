@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/common :: common_header(~{::title})">
+<title>商户用户</title>
+</head>
+<body>
+	<div class="layui-fluid">
+    <div class="layui-card">
+      <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+         <div class="layui-form-item">
+			<div class="layui-inline">
+	            <label class="layui-form-label">用户名</label>
+	            <div class="layui-input-block">
+	            <input type="text" name="account" placeholder="请输入" autocomplete="off" class="layui-input">
+	            </div>
+	         </div>
+			<div class="layui-inline">
+	            <label class="layui-form-label">商户角色</label>
+	            <div class="layui-input-block">
+	             <select name="merchantRoleId" lay-verify="" >
+				  <option value="">请选择一个角色</option>
+				  	<option th:each="t:${roleList}" th:value="${t.id}" th:text="${t.name}"></option>
+				</select> 
+	            </div>
+	         </div>
+			<div class="layui-inline">
+	            <label class="layui-form-label">姓名</label>
+	            <div class="layui-input-block">
+	            <input type="text" name="name" placeholder="请输入" autocomplete="off" class="layui-input">
+	            </div>
+	         </div>
+			<div class="layui-inline">
+	            <label class="layui-form-label">联系电话</label>
+	            <div class="layui-input-block">
+	            <input type="text" name="phone" placeholder="请输入" autocomplete="off" class="layui-input">
+	            </div>
+	         </div>
+			<!-- <div class="layui-inline">
+	            <label class="layui-form-label">状态</label>
+	            <div class="layui-input-block">
+	            <select name="status" lay-verify="" >
+				  <option value="">请选择</option>
+				  	<option th:each="t:${status}" th:value="${t.index}" th:text="${t.description}"></option>
+				</select>
+	            </div>
+	         </div> -->
+          <div class="layui-inline">
+            <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="LAY-front-search">
+              <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+            </button>
+          </div>
+          
+        </div>
+      </div>
+      
+      <div class="layui-card-body">
+	        <script type="text/html" id="toolbar">
+       		
+             </script>
+             <!--  <div  class="layui-btn-container">
+        	  <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+      	     </div> -->
+        <table id="merchantUser_table" lay-filter="merchantUser_table"></table>
+       
+        <script type="text/html" id="table_tool">
+          <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+          <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+        </script>
+      </div>
+    </div>
+  </div>
+
+  <script th:inline="none" >
+  layui.use(['table','form'], function(){
+    var $ = layui.$
+    ,form = layui.form
+    ,table = layui.table;
+    
+  //列表table
+    table.render({
+      elem: '#merchantUser_table'
+      ,url: '/merchant/merchantUser/listMerchantUser' 
+       ,toolbar: '#toolbar',
+       defaultToolbar: ['filter', 'print']
+      ,cols: [[
+		{type:'numbers'}
+        ,{field: 'id', width: 100, title: 'ID', sort: true}
+        ,{field: 'merchantName', width: 100, title: '商户名称'}
+        ,{field: 'merchantNo', width: 100, title: '商户编号'}
+        ,{field: 'account', width: 100, title: '用户名'}
+        ,{field: 'merchantRoleName', width: 100, title: '商户角色'}
+        ,{field: 'name', width: 100, title: '姓名'}
+        ,{field: 'phone', width: 100, title: '联系电话'}
+        ,{field: 'remark', width: 100, title: '备注'}
+        ,{field: 'statusDesc', width: 100, title: '状态'}
+        ,{title: '操作', width: 150, align:'center', fixed: 'right', toolbar: '#table_tool'}
+      ]]
+      ,page: true
+      ,limit: 20
+      //,height: 'full-220'
+      ,text: {
+		    none: '暂无相关数据' //默认：无数据。
+	  }
+    });
+  
+    
+    //监听工具条
+    table.on('tool(merchantUser_table)', function(obj){
+      var data = obj.data;
+      if(obj.event === 'del'){
+    	  layer.confirm('确认删除行么', function(index){
+    		  var field = {"id" : data.id}; //获取提交的字段
+              var param={"field":field,"index":index,"table":table,"layer":layer,"url":"/merchant/merchantUser/deleteMerchantUser","tableId":"merchantUser_table"};
+              ajaxSubmit(param);
+              
+          });
+      } else if(obj.event === 'edit'){
+        var tr = $(obj.tr);
+
+        layer.open({
+          type: 2
+          ,title: '编辑商户用户'
+          ,content: '/merchant/merchantUser/editMerchantUser?id='+data.id
+          ,maxmin: true
+          ,area: ['500px', '450px']
+          ,btn: ['确定', '取消']
+          ,yes: function(index, layero){
+            var iframeWindow = window['layui-layer-iframe'+ index]
+            ,submitID = 'LAY-front-submit'
+            ,submit = layero.find('iframe').contents().find('#'+ submitID);
+
+            //监听提交
+            iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+              var field = data.field; //获取提交的字段
+              var param={"field":field,"index":index,"table":table,"layer":layer,"url":"/merchant/merchantUser/updateMerchantUser","tableId":"merchantUser_table"};
+              ajaxSubmit(param);
+             
+            });  
+            
+            submit.trigger('click');
+          }
+          ,success: function(layero, index){
+            
+          }
+        });
+      }
+    });
+    
+    //监听搜索
+    form.on('submit(LAY-front-search)', function(data){
+      var field = data.field;
+      
+      //执行重载
+      table.reload('merchantUser_table', {
+        where: field
+      });
+    });
+    
+    //头工具栏事件
+    table.on('toolbar(merchantUser_table)', function(obj){
+      var checkStatus = table.checkStatus(obj.config.id); //获取选中行状态
+      switch(obj.event){
+        case 'add':
+        	layer.open({
+                type: 2
+                ,title: '添加商户用户'
+                ,content: '/merchant/merchantUser/addMerchantUser'
+                ,maxmin: true
+                ,area: ['500px', '450px']
+                ,btn: ['确定', '取消']
+                ,yes: function(index, layero){
+                  var iframeWindow = window['layui-layer-iframe'+ index]
+                  ,submitID = 'LAY-front-submit'
+                  ,submit = layero.find('iframe').contents().find('#'+ submitID);
+
+                  //监听提交
+                  iframeWindow.layui.form.on('submit('+ submitID +')', function(data){
+                    var field = data.field; //获取提交的字段
+                    var param={"field":field,"index":index,"table":table,"layer":layer,"url":"/merchant/merchantUser/saveMerchantUser","tableId":"merchantUser_table"};
+                    ajaxSubmit(param);
+                   
+                  });  
+                  
+                  submit.trigger('click');
+                }
+              }); 
+        break;
+      };
+    });
+  
+    
+   
+  });
+  </script>
+</body>
+</html>

@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="MerchantUserMapper">
+
+	<resultMap id="BaseResultMap" type="com.xxyp.admin.common.model.merchant.MerchantUser">
+		<id property="id" column="id" />
+		<result property="merchantId" column="merchant_id" />
+		<result property="account" column="account" />
+		<result property="password" column="password" />
+		<result property="merchantRoleId" column="merchant_role_id" />
+		<result property="name" column="name" />
+		<result property="phone" column="phone" />
+		<result property="remark" column="remark" />
+		<result property="status" column="status" />
+		<result property="usedTag" column="used_tag" />
+		<result property="createDate" column="create_date" />
+		<result property="creator" column="creator" />
+		<result property="editDate" column="edit_date" />
+		<result property="editor" column="editor" />
+	</resultMap>
+	<sql id="All_Column">
+		id,merchant_id,account,password,merchant_role_id,name,phone,remark,status,used_tag,create_date,creator,edit_date,editor
+	</sql>
+
+	<select id="getMerchantUser" parameterType="map" resultMap="BaseResultMap" >
+		select
+		<include refid="All_Column" />
+		from merchant_user
+		where 1=1 
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<if test="merchantId != null ">
+			and merchant_id = #{merchantId}
+		</if>
+		
+		<if test="account != null and account !=''">
+			and account = #{account}
+		</if>
+		
+		<if test="password != null and password !=''">
+			and password = #{password}
+		</if>
+		
+		<if test="merchantRoleId != null ">
+			and merchant_role_id = #{merchantRoleId}
+		</if>
+		
+		<if test="name != null and name !=''">
+			and name = #{name}
+		</if>
+		
+		<if test="phone != null and phone !=''">
+			and phone = #{phone}
+		</if>
+		
+		<if test="remark != null and remark !=''">
+			and remark = #{remark}
+		</if>
+		
+		<if test="status != null ">
+			and status = #{status}
+		</if>
+		
+	</select>
+	
+	<select id="queryMerchantUserForPage" parameterType="map" resultType="com.xxyp.admin.common.model.merchant.MerchantUser">
+		select
+          mu.id,mu.account,mu.name,mu.phone,mu.status,mu.remark,mi.merchant_name merchantName,mi.merchant_no merchantNo,mr.name merchantRoleName
+       	 from merchant_user mu
+       	 left join merchant_info mi on mu.merchant_id=mi.id
+       	 left join merchant_role mr on mu.merchant_role_id=mr.id 
+       	 <include refid="queryPageSqlCondition"/>
+       	 order by id limit #{startIndex},#{pageSize}
+	</select>
+	
+	<select id="countMerchantUserForPage" parameterType="map" resultType="int">
+		select count(1) 
+		from merchant_user mu
+       	 left join merchant_info mi on mu.merchant_id=mi.id
+       	 left join merchant_role mr on mu.merchant_role_id=mr.id 
+		<include refid="queryPageSqlCondition"/>
+	</select>
+	
+	<insert id="saveMerchantUser" parameterType="com.xxyp.admin.common.model.merchant.MerchantUser" useGeneratedKeys="true" keyProperty="id">
+		insert into merchant_user(
+		merchant_id,
+		account,
+		password,
+		merchant_role_id,
+		name,
+		phone,
+		email,
+		remark,
+		status,
+		used_tag,
+		create_date,
+		creator,
+		edit_date,
+		editor
+		)values (
+		#{merchantId},
+		#{account},
+		#{password},
+		#{merchantRoleId},
+		#{name},
+		#{phone},
+		#{email},
+		#{remark},
+		#{status},
+		#{usedTag},
+		#{createDate},
+		#{creator},
+		#{editDate},
+		#{editor}
+		)
+	</insert>
+	
+	<update id="updateMerchantUser" parameterType="com.xxyp.admin.common.model.merchant.MerchantUser">
+		update merchant_user
+			set
+			merchant_id = #{merchantId},
+			account = #{account},
+			password = #{password},
+			merchant_role_id = #{merchantRoleId},
+			name = #{name},
+			phone = #{phone},
+			remark = #{remark},
+			status = #{status},
+			editor = #{editor},
+			edit_date = #{editDate}	
+		where id = #{id}
+	</update>
+	
+	 <update id="updateUser" parameterType="com.xxyp.admin.common.model.merchant.MerchantUser">
+		update merchant_user
+			set id = #{id}
+			<if test="password !=null and password !=''">
+				,password = #{password}
+			</if>
+			<if test="name !=null and name !=''">
+				,name = #{name}
+			</if>
+			<if test="lastLoginTime !=null">
+				,last_login_time = #{lastLoginTime}
+			</if>
+			<if test="status !=null">
+				,status = #{status}
+			</if>
+		where id = #{id}
+	</update>
+	
+	<delete id="deleteMerchantUser" parameterType="long">
+		delete from merchant_user where id = #{id}
+	</delete>
+	
+	<sql id="queryPageSqlCondition">
+		<where>
+			<if test="id!=null">
+				mu.id = #{id}
+			</if>
+			
+			<if test="merchantId != null ">
+				and mu.merchant_id = #{merchantId}
+			</if>
+			
+			<if test="account != null and account !=''">
+				and mu.account = #{account}
+			</if>
+			
+			<if test="merchantRoleId != null ">
+				and mu.merchant_role_id = #{merchantRoleId}
+			</if>
+			
+			<if test="name != null and name !=''">
+				and mu.name = #{name}
+			</if>
+			
+			<if test="phone != null and phone !=''">
+				and mu.phone = #{phone}
+			</if>
+			
+			<if test="status != null ">
+				and mu.status = #{status}
+			</if>
+			
+		</where>
+	</sql>
+	
+	 <select id="getUserByAccount" parameterType="map" resultMap="BaseResultMap">
+	    select  <include refid="All_Column"/> 
+	    from merchant_user where 1=1
+	    <if test="account !=null and account!=''">
+	    	and account=#{account}
+	    </if>
+    </select>
+    
+    <select id="getPermissionList" parameterType="map" resultType="com.xxyp.admin.common.model.merchant.MerchantPermission">
+    	select id,name,method methodName,load_data_method loadDataMethodName,
+    	menu_url menuUrl,module_id moduleId, order_index orderIndex,is_menu isMenu
+    	 from merchant_permission where id in(
+			select distinct mrp.permission_id from merchant_user mu
+			inner join merchant_role_permission mrp on mrp.role_id=mu.merchant_role_id
+			where mu.id=#{userId}
+		) order by order_index
+    </select>
+    
+    <select id="getPermissionItemList" parameterType="map" resultType="com.xxyp.admin.common.model.merchant.MerchantPermissionItem">
+	    	select id,permission_id permissionId,name,method_value1 methodValue1,method_value2 methodValue2 
+	    	from merchant_permission_item where id in(
+				select distinct mrp.permission_id from merchant_user mu
+				inner join merchant_role_permission mrp on mrp.role_id=mu.merchant_role_id
+				where mu.id=#{userId}
+			) 
+    </select>
+	
+</mapper>

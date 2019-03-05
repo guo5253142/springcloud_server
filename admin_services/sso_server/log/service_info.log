@@ -1,0 +1,2 @@
+2019-01-28 11:45:19 2118 [main] INFO 
+				o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'configurationPropertiesRebinderAutoConfiguration' of type [org.springframework.cloud.autoconfigure.ConfigurationPropertiesRebinderAutoConfiguration$$EnhancerBySpringCGLIB$$85fb7795] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)

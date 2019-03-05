@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/common :: common_header(~{::title})">
+<title>角色列表</title>
+</head>
+<style>
+	.module:hover{color:#008000;cursor:pointer}
+	.module_item{display:none}
+</style>
+<script th:src="@{/js/jquery-1.7.2.min.js}"></script>
+<body>
+<form class="layui-form" action="" style="padding: 20px 0 0 0;">
+	<input type="hidden" name="id" th:value="${role.id}" />
+	  <div class="layui-form-item">
+			      <label class="layui-form-label">角色名</label>
+			      <div class="layui-input-inline">
+			        <input type="text" name="name" lay-verify="required" placeholder="请输入角色名" th:value="${role.name}" autocomplete="off" class="layui-input">
+			      </div>
+			    </div>
+			   
+			    <div class="layui-form-item">
+			      <label class="layui-form-label">备注</label>
+			      <div style="width:60%" class="layui-input-inline">
+			        <input type="text" name="remark"  placeholder="请输入备注" th:value="${role.remark}" autocomplete="off" class="layui-input">
+			      </div>
+			  </div>
+			  <div class="layui-form-item">
+			  	  <label class="layui-form-label"></label>
+			   	  <div class="layui-input-inline">
+			      <a id="contorller" href="javascript:">全部展开/全部关闭</a>
+			      </div>
+			  </div>
+	<div  class="layui-form-item">
+	 <label class="layui-form-label">配置权限</label>
+	 <div style="width:80%" class="layui-input-inline">
+		<table style="width:100%">
+						
+						<tr th:each="t:${moduleList}">
+							<td>
+								<div style="width:100%">
+								<input  type="checkbox" lay-filter="moudle" lay-skin="primary" class="module_checkbox"  th:value="${t.id}"></input>
+								
+								<span  class="module" th:value="${t.id}" th:text="${t.name}+'：'"></span>
+								
+								</div>
+								<!-- lay-skin="primary" -->
+								<div style="display:none;width:100%" th:attr="class='module_item_'+${t.id}+' module_item'">
+									<span th:each="permission:${modulePermissionMap[t.id]}">
+										<div style='margin:0 0 0 20px'>
+											<input type='checkbox' 
+												lay-filter="module_item"
+												lay-skin="primary"
+												name='permissionIds[]' 
+												th:attr="class='permission_'+${permission.id}"
+												th:checked="${permission.isChecked eq true}"
+												th:value="${permission.id}"
+												/><span th:text="${permission.name}"></span>
+										</div>
+										<div style='margin:0 0 0 40px'>
+											<span th:each="permissionItem,status:${permissionAndItemMap[permission.id]}">
+												<input type='checkbox' 
+													th:attr="class='checkbox_'+${permission.id}" 
+													lay-skin="primary"
+													name='permissionItem[]'
+													th:checked="${permissionItem.isChecked eq true}"
+													th:value="${permission.id}+'_'+${permissionItem.id}"
+													/><span th:text="${permissionItem.name}"></span>
+													<th:block th:if="${status.count%8 eq 0}">
+														<br/>
+													</th:block>
+											</span>
+										</div>
+									</span>
+								</div>
+							</td>
+						</tr>
+						
+					</table>
+					</div>
+	</div>
+    
+    
+    <div class="layui-form-item layui-hide">
+      <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
+    </div>
+  </form>
+  
+   <script>
+  layui.use(['form'], function(){
+    var $ = layui.$
+    ,form = layui.form;
+    //模块复选框
+     form.on('checkbox(moudle)', function(data){
+    	 if(data.elem.checked){
+    		 var $module_item = "module_item_" + data.value;
+    			$("." + $module_item + " input:checkbox").each(function(){
+    				$(this).attr("checked","checked");
+    				//重新渲染 才会显示勾选
+    				form.render("checkbox");
+    			});
+    	 }else{
+    		var $module_item = "module_item_" + data.value;
+ 			$("." + $module_item + " input:checkbox").each(function(){
+ 				$(this).removeAttr("checked");
+ 				//重新渲染 才会显示勾选
+ 				form.render("checkbox");
+ 			});
+    	 }
+    	});  
+     
+     //权限复选框
+     form.on('checkbox(module_item)', function(data){
+    	 if(data.elem.checked){
+    		 var $module_item = "checkbox_" + data.value;
+    			$("." + $module_item).each(function(){
+    				$(this).attr("checked","checked");
+    				//重新渲染 才会显示勾选
+    				form.render("checkbox");
+    			});
+    	 }else{
+    		var $module_item = "checkbox_" + data.value;
+ 			$("." + $module_item).each(function(){
+ 				$(this).removeAttr("checked");
+ 				//重新渲染 才会显示勾选
+ 				form.render("checkbox");
+ 			});
+    	 }
+    	});
+  })
+  
+  
+  $(".module").click(function(){
+		var id = $(this).attr("value");
+		var $module_item = $(".module_item_" + id);
+		if ($module_item.css("display") == "none") {
+			$module_item.show();
+		} else {
+			$module_item.hide();
+		}
+	});
+  
+  $("#contorller").toggle(function(){
+		$(".module_item").each(function(){
+			$(this).show();
+		});
+	},function(){
+		$(".module_item").each(function(){
+			$(this).hide();
+		});
+	})
+  </script>
+  
+ 
+  
+</body>
+</html>

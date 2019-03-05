@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/common :: common_header(~{::title})">
+<title>新增商户信息</title>
+</head>
+<body>
+<form class="layui-form" action="" style="padding: 20px 0 0 0;">
+	 
+	 <div class="layui-form-item">
+      <label class="layui-form-label">商户名称</label>
+      <div class="layui-input-inline">
+        <input type="text" name="merchantName" lay-verify="required" placeholder="请输入商户名称" autocomplete="off" class="layui-input">
+      </div>
+     </div>
+	 <div class="layui-form-item">
+      <label class="layui-form-label">商户编号</label>
+      <div class="layui-input-inline">
+        <input type="text" name="merchantNo" lay-verify="required" placeholder="请输入商户编号" autocomplete="off" class="layui-input">
+      </div>
+     </div>
+	 <div class="layui-form-item">
+      <label class="layui-form-label">申请时间</label>
+      <div class="layui-input-inline">
+        <input type="text" name="applyDate" lay-verify="required" placeholder="请输入申请时间" autocomplete="off" class="layui-input">
+      </div>
+     </div>
+	 <div class="layui-form-item">
+      <label class="layui-form-label">法人姓名</label>
+      <div class="layui-input-inline">
+        <input type="text" name="legalpersonName" lay-verify="required" placeholder="请输入法人姓名" autocomplete="off" class="layui-input">
+      </div>
+     </div>
+	 <div class="layui-form-item">
+      <label class="layui-form-label">法人证件类型</label>
+      <div class="layui-input-inline">
+        <input type="text" name="legalpersonDoctype" lay-verify="required" placeholder="请输入法人证件类型" autocomplete="off" class="layui-input">
+      </div>
+     </div>
+	 <div class="layui-form-item">
+      <label class="layui-form-label">法人证件号</label>
+      <div class="layui-input-inline">
+        <input type="text" name="legalpersonDocno" lay-verify="required" placeholder="请输入法人证件号" autocomplete="off" class="layui-input">
+      </div>
+     </div>
+	 <div class="layui-form-item">
+      <label class="layui-form-label">法人手机号</label>
+      <div class="layui-input-inline">
+        <input type="text" name="legalpersonPhone" lay-verify="required" placeholder="请输入法人手机号" autocomplete="off" class="layui-input">
+      </div>
+     </div>
+	 <div class="layui-form-item">
+      <label class="layui-form-label">商户状态</label>
+      <div class="layui-input-inline">
+        <select name="status" lay-verify="" >
+		  <option value="">请选择</option>
+		  	<option th:each="t:${status}" th:value="${t.index}" th:text="${t.description}"></option>
+		</select>
+      </div>
+     </div>
+    
+    <div class="layui-form-item layui-hide">
+      <input type="button" lay-submit lay-filter="LAY-front-submit" id="LAY-front-submit" value="确认">
+    </div>
+  </form>
+  
+   <script>
+  layui.use(['form'], function(){
+    var $ = layui.$
+    ,form = layui.form;
+  })
+  </script>
+  
+</body>
+</html>

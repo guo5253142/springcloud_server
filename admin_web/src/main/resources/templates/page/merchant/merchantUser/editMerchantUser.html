@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/common :: common_header(~{::title})">
+<title>编辑商户用户</title>
+</head>
+<body>
+<form class="layui-form" lay-filter="editForm" style="padding: 20px 0 0 0;">
+	<input type="hidden" name="id"/>
+	<input type="hidden" name="merchantId"/>
+	 <div class="layui-form-item">
+      <label class="layui-form-label">用户名</label>
+      <div class="layui-input-inline">
+        <input type="text" name="account" lay-verify="required" readonly="readonly"  placeholder="请输入用户名" autocomplete="off" class="layui-input">
+      </div>
+     </div>
+	 <div class="layui-form-item">
+      <label class="layui-form-label">商户角色</label>
+      <div class="layui-input-inline">
+        <select name="merchantRoleId" lay-verify="" >
+		  <option value="">请选择一个角色</option>
+		  	<option th:each="t:${roleList}" th:value="${t.id}" th:text="${t.name}"></option>
+		</select> 
+      </div>
+     </div>
+	 <div class="layui-form-item">
+      <label class="layui-form-label">姓名</label>
+      <div class="layui-input-inline">
+        <input type="text" name="name" lay-verify="required" maxlength="15" placeholder="请输入姓名" autocomplete="off" class="layui-input">
+      </div>
+     </div>
+	 <div class="layui-form-item">
+      <label class="layui-form-label">联系电话</label>
+      <div class="layui-input-inline">
+        <input type="text" name="phone" lay-verify="required" placeholder="请输入联系电话" autocomplete="off" class="layui-input">
+      </div>
+     </div>
+	 <div class="layui-form-item">
+      <label class="layui-form-label">备注</label>
+      <div class="layui-input-inline">
+        <input type="text" name="remark" lay-verify="required" maxlength="100" placeholder="请输入备注" autocomplete="off" class="layui-input">
+      </div>
+     </div>
+	 <div class="layui-form-item">
+      <label class="layui-form-label">状态</label>
+      <div class="layui-input-inline">
+        <select name="status" lay-verify="" >
+		  <option value="">请选择</option>
+		  	<option th:each="t:${status}" th:value="${t.index}" th:text="${t.description}"></option>
+		</select>
+      </div>
+     </div>
+    <div class="layui-form-item layui-hide">
+      <input type="button" lay-submit lay-filter="LAY-front-submit" id="LAY-front-submit" value="确认">
+    </div>
+  </form>
+  
+   <script th:inline="javascript">
+  layui.use(['form'], function(){
+    var $ = layui.$
+    ,form = layui.form;
+    
+    form.val("editForm", {
+    	  "id":[[${merchantUser.id}]]
+		   ,"merchantId": [[${merchantUser.merchantId}]]
+		   ,"account": [[${merchantUser.account}]]
+		   ,"password": [[${merchantUser.password}]]
+		   ,"merchantRoleId": [[${merchantUser.merchantRoleId}]]
+		   ,"name": [[${merchantUser.name}]]
+		   ,"phone": [[${merchantUser.phone}]]
+		   ,"remark": [[${merchantUser.remark}]]
+		   ,"status": [[${merchantUser.status}]]
+    	});
+  })
+  </script>
+  
+</body>
+</html>

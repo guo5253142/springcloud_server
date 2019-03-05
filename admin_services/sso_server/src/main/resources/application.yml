@@ -1,0 +1,9 @@
+spring:
+  profiles:
+    active: dev
+    
+ssoauthic:
+  cookieName: SSOID
+  secretKey: 111111112222222233333333
+  ticketTimeout: 600
+  secure: false

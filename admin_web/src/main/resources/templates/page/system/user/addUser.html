@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:replace="common/common :: common_header(~{::title})">
+<title>新增用户</title>
+</head>
+<body>
+<form class="layui-form" action="" style="padding: 20px 0 0 0;">
+	 <div class="layui-form-item">
+      <label class="layui-form-label">选择角色</label>
+      <div class="layui-input-inline">
+        <select name="roleId" lay-verify="required">
+		  <option value="">请选择一个角色</option>
+		  <option th:each="t:${roleList}" th:value="${t.id}" th:text="${t.name}"></option>
+		</select> 
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">用户名</label>
+      <div class="layui-input-inline">
+        <input type="text" name="account" lay-verify="username" maxlength="16" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">姓名</label>
+      <div class="layui-input-inline">
+        <input type="text" name="name" lay-verify="required" maxlength="15" placeholder="请输入姓名" autocomplete="off" class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">选择状态</label>
+      <div class="layui-input-inline">
+        <select name="status" lay-verify="required">
+		  <option value="">请选择一个状态</option>
+		  <option th:each="t:${statusList}" th:value="${t.index}" th:text="${t.description}"></option>
+		</select> 
+      </div>
+    </div>
+    <div class="layui-form-item layui-hide">
+      <input type="button" lay-submit lay-filter="LAY-user-front-submit" id="LAY-user-front-submit" value="确认">
+    </div>
+  </form>
+  
+   <script>
+  layui.use(['form'], function(){
+    var $ = layui.$
+    ,form = layui.form;
+  })
+  </script>
+  
+</body>
+</html>
